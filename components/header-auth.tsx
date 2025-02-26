@@ -8,6 +8,7 @@ import { createClient } from "@/utils/supabase/server";
 export default async function AuthButton() {
   const supabase = await createClient();
 
+  // Step 1: Get the authenticated user's ID
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -48,16 +49,34 @@ export default async function AuthButton() {
       </>
     );
   }
-  return user ? (
-    <div className="flex items-center gap-4">
-      Hey, {user.email}!
-      <form action={signOutAction}>
-        <Button type="submit" variant={"outline"}>
-          Sign out
-        </Button>
-      </form>
-    </div>
-  ) : (
+
+  if (user) {
+    const { data: userData, error: userError } = await supabase
+      .from("users")
+      .select("username") 
+      .eq("user_id", user.id) 
+      .single(); 
+
+    if (userError) {
+      console.error("Error fetching user data:", userError.message);
+      return <div>Error loading user data</div>;
+    }
+
+    const userName = userData?.username;
+
+    return (
+      <div className="flex items-center gap-4">
+        Hey, {userName}!
+        <form action={signOutAction}>
+          <Button type="submit" variant={"outline"}>
+            Sign out
+          </Button>
+        </form>
+      </div>
+    );
+  }
+
+  return (
     <div className="flex gap-2">
       <Button asChild size="sm" variant={"outline"}>
         <Link href="/sign-in">Sign in</Link>
