@@ -8,10 +8,10 @@ export function BottomNav() {
   const pathname = usePathname();
 
   const navItems = [
-    { name: "Beranda", href: "/", icon: Home },
-    { name: "Misi", href: "/misi", icon: Target },
+    { name: "Beranda", href: "/home", icon: Home },
+    { name: "Misi", href: "/mission", icon: Target },
     { name: "Leaderboard", href: "/leaderboard", icon: Trophy },
-    { name: "Profil", href: "/profil", icon: User },
+    { name: "Profil", href: "/profile", icon: User },
   ];
 
   return (
